@@ -2,6 +2,7 @@ package pl.solutions.software.sokolik.bartosz.infrastructure;
 
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -16,8 +17,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
@@ -35,13 +34,13 @@ public class UserDatabaseConfiguration {
 
     @Primary
     @Bean(name = "userEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource) {
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", "validate");
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder,
+                                                                       DataSource dataSource,
+                                                                       JpaProperties jpaProperties) {
         return builder.dataSource(dataSource)
                 .packages("pl.solutions.software.sokolik.bartosz.user.domain")
                 .persistenceUnit("user")
-                .properties(properties)
+                .properties(jpaProperties.getProperties())
                 .build();
     }
 
