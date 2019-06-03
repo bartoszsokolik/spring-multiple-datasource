@@ -17,7 +17,13 @@ spring:
     console:
       enabled: true
   jpa:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: validate
+    user:
+      properties:
+        hibernate:
+          hbm2ddl:
+            auto: validate
+    movie:
+      properties:
+        hibernate:
+          hbm2ddl:
+            auto: validate

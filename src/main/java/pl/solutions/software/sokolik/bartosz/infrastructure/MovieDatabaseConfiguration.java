@@ -35,18 +35,23 @@ public class MovieDatabaseConfiguration {
     @Bean(name = "movieEntityManagerFactory")
     @DependsOn("movieLiquibase")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder,
-                                                                       @Qualifier("movieDatasource") DataSource dataSource,
-                                                                       JpaProperties jpaProperties) {
+                                                                       @Qualifier("movieDatasource") DataSource dataSource) {
         return builder.dataSource(dataSource)
                 .packages("pl.solutions.software.sokolik.bartosz.movie.domain")
                 .persistenceUnit("movie")
-                .properties(jpaProperties.getProperties())
+                .properties(movieJpaProperties().getProperties())
                 .build();
     }
 
     @Bean(name = "movieTransactionManager")
     public PlatformTransactionManager platformTransactionManager(@Qualifier("movieEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
+    }
+
+    @Bean(name = "movieJpaProperties")
+    @ConfigurationProperties(prefix = "spring.jpa.movie")
+    public JpaProperties movieJpaProperties() {
+        return new JpaProperties();
     }
 
     @Bean(name = "movieProperties")

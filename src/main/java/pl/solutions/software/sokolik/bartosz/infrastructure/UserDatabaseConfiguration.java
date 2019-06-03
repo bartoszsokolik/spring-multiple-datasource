@@ -51,6 +51,13 @@ public class UserDatabaseConfiguration {
     }
 
     @Primary
+    @Bean(name = "userJpaProperties")
+    @ConfigurationProperties(prefix = "spring.jpa.user")
+    public JpaProperties jpaProperties() {
+        return new JpaProperties();
+    }
+
+    @Primary
     @Bean(name = "userProperties")
     @ConfigurationProperties(prefix = "spring.user.datasource.liquibase")
     public LiquibaseProperties userProperties() {
